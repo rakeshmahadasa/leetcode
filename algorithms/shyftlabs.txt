@@ -1,0 +1,31 @@
+-- #Question - 1
+select subclass_name,class_name,dept_name,sum(revenue) as rollup_revenue
+from SKU_MASTER
+group by subclass_name,class_name,dept_name
+
+-- Question -2 
+drop from customer_master 
+WHERE
+( row_number() over(partition by customer_name,customer_phone,customer_email order by customer_id) ) > 1
+
+
+-- Question -3 
+select employee, manager
+from (
+  select e.employee_name as employee, m.employee_name as manager
+  from employee_master e
+  left join employee_master m
+  on e.manager_id = m.employee_id 
+)
+
+
+-- Question - 4
+select fiscal_month, monthly_sales as curr_month_sales, 
+lead(monthly_sales) over(order by fiscal_month) as next_month_sales
+from(
+select fiscal_month,sum(net_sales) as monthly_sales
+from org_sales
+group by fiscal_month
+)
+
+
